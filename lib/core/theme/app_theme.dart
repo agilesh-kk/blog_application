@@ -18,10 +18,14 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       backgroundColor: AppPallete.backgroundColor,
     ),
+
+    //Used in the topic selection of add_new_blog_page.
     chipTheme: ChipThemeData(
       color: WidgetStatePropertyAll(AppPallete.backgroundColor),
       side: BorderSide.none,
     ),
+
+    //used in the testfileds when it is selected or the user starts to enter the text.
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: const EdgeInsets.all(27),
       enabledBorder: _border(),
