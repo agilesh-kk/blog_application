@@ -114,7 +114,7 @@ class _MainAppState extends State<MainApp> {
             path: AddNewBlogPage.pageName,
             builder: (context, state) => const AddNewBlogPage(),
           ),
-        ]
+        ],
       ),      
     ],
   );
