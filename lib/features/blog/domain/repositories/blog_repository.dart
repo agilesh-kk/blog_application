@@ -3,7 +3,7 @@ import 'package:blog_app/features/blog/domain/entities/blog.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 
-//interface for the repository of uploading the blogs
+//interface for the repository of uploading and fetching the blogs
 abstract interface class BlogRepository {
   Future<Either<Failure, Blog>> uploadBlog({
     required XFile image,
@@ -12,4 +12,6 @@ abstract interface class BlogRepository {
     required String posterId,
     required List<String> topics,
   });
+
+  Future<Either<Failure, List<Blog>>> getAllBlogs();
 }

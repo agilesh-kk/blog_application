@@ -113,7 +113,8 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           if(state is BlogFailure){
             showSnackbar(context, state.error);
           }
-          else if(state is BlogSuccess){
+          else if(state is BlogUploadSuccess){
+            //context.read<BlogBloc>().add(GetAllBlogsEvent());
             context.goNamed(BlogPage.pageName); //redirecting to the blog page.
           }
         },
