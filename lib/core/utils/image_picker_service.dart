@@ -69,7 +69,7 @@ class ImagePickerService {
       );
       return image;
     } catch (e) {
-      print('Error picking image: $e');
+      //print('Error picking image: $e');
       return null;
     }
   }

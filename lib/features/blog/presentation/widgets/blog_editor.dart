@@ -17,6 +17,12 @@ class BlogEditor extends StatelessWidget {
         hintText: hintText,
       ),
       maxLines: null, //used to make new lines once each line is filled.
+      validator: (value) { //to check if the fields are not empty.
+        if(value!.isEmpty){
+          return '$hintText is missing';
+        }
+        return null;
+      },
     );
   }
 }

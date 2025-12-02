@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:blog_app/core/errors/exceptions.dart';
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class BlogRemoteDataSource {
   Future<BlogModel> uploadBlog(BlogModel blog);
   Future<String> uploadImage({
-    required File image,
+    required XFile image,
     required BlogModel blog,
   });
 }
@@ -30,9 +31,12 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource{
   }
   
   @override
-  Future<String> uploadImage({required File image, required BlogModel blog,}) async {
+  Future<String> uploadImage({required XFile image, required BlogModel blog,}) async {
     try{
-      await supabaseClient.storage.from('blog_images').upload(blog.id, image);
+      // Supabase storage expects a dart:io `File` on non-web platforms.
+      final File file = File(image.path);
+
+      await supabaseClient.storage.from('blog_images').upload(blog.id, file);
 
       return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
     }

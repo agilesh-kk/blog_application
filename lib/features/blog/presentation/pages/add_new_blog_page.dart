@@ -1,11 +1,18 @@
 import 'dart:io';
 
+import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
+import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/image_picker_service.dart';
 import 'package:blog_app/core/utils/modal_bottom_sheet.dart';
+import 'package:blog_app/core/utils/show_snackbar.dart';
+import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_editor.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddNewBlogPage extends StatefulWidget {
@@ -19,6 +26,7 @@ class AddNewBlogPage extends StatefulWidget {
 class _AddNewBlogPageState extends State<AddNewBlogPage> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   List<String> selectedTopic = [];
 
   XFile? _pickedImage;
@@ -67,120 +75,174 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
     }
   }
 
+  void uploadBlog() {
+    //checking for null values in the form fields (validation)
+    if (formKey.currentState!.validate() &&
+        selectedTopic.isNotEmpty &&
+        _pickedImage != null) {
+      //the user is logged in and the user id is feteched from the cubit (appusercubit)    
+      final posterId =
+          (context.read<AppUserCubit>().state as AppUserIsSignedin).user.id;
+      context.read<BlogBloc>().add(
+        UploadBlogEvent(
+          posterId: posterId,
+          title: titleController.text.trim(),
+          content: contentController.text.trim(),
+          image: _pickedImage!,
+          topics: selectedTopic,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.done_rounded))],
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: _showImageSourceBottomSheet,
-                child: DottedBorder(
-                  options: RoundedRectDottedBorderOptions(
-                    radius: const Radius.circular(8),
-                    strokeWidth: 2,
-                    color: AppPallete.borderColor,
-                    dashPattern: const [10, 4],
-                    strokeCap: StrokeCap.round,
-                    padding: const EdgeInsets.all(8),
-                  ),
-
-                  //place to add the image from the internal storage.
-                  child: Container(
-                    height: 150,
-                    width: double.infinity,
-                    child:
-                        _pickedImage == null
-                            ? const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.folder_open_rounded, size: 40),
-                                SizedBox(height: 15),
-                                Text(
-                                  "Select your Image",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ],
-                            )
-                            : ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.file(
-                                File(_pickedImage!.path),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                              ),
-                            ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 20),
-
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  //the contents from the list are iterated and assigned to the chip text.
-                  children:
-                      ['Technology', 'Business', 'Programming', 'Entertainment']
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (selectedTopic.contains(e)) {
-                                    selectedTopic.remove(e);
-                                  } else {
-                                    selectedTopic.add(
-                                      e,
-                                    ); //appends the topics which are clicked.
-                                  }
-                                  setState(() {});
-                                  //print(selectedTopic);
-                                },
-                                child: Chip(
-                                  label: Text(e),
-                                  //the selected topics are hightlighted with the gradient color.
-                                  color:
-                                      selectedTopic.contains(e)
-                                          ? const WidgetStatePropertyAll(
-                                            AppPallete.gradient1,
-                                          )
-                                          : null,
-                                  side:
-                                      selectedTopic.contains(e)
-                                          ? null
-                                          : const BorderSide(
-                                            color: AppPallete.borderColor,
-                                          ),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                ),
-              ),
-
-              SizedBox(height: 20),
-
-              //creating the text field to add the title for the blog
-              BlogEditor(controller: titleController, hintText: 'Blog title'),
-
-              SizedBox(height: 20),
-
-              //creating the text field to add the contents for the blog
-              BlogEditor(
-                controller: contentController,
-                hintText: 'Blog Content',
-              ),
-            ],
+        actions: [
+          IconButton(
+            onPressed: () {
+              uploadBlog();
+            },
+            icon: Icon(Icons.done_rounded),
           ),
-        ),
+        ],
+      ),
+      body: BlocConsumer<BlogBloc, BlogState>(
+        listener: (context, state) {
+          if(state is BlogFailure){
+            showSnackbar(context, state.error);
+          }
+          else if(state is BlogSuccess){
+            context.goNamed(BlogPage.pageName); //redirecting to the blog page.
+          }
+        },
+        builder: (context, state) {
+          if(state is BlogLoading){
+            return const Loader();
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _showImageSourceBottomSheet,
+                      child: DottedBorder(
+                        options: RoundedRectDottedBorderOptions(
+                          radius: const Radius.circular(8),
+                          strokeWidth: 2,
+                          color: AppPallete.borderColor,
+                          dashPattern: const [10, 4],
+                          strokeCap: StrokeCap.round,
+                          padding: const EdgeInsets.all(8),
+                        ),
+
+                        //place to add the image from the internal storage.
+                        child: Container(
+                          height: 150,
+                          width: double.infinity,
+                          child:
+                              _pickedImage == null
+                                  ? const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.folder_open_rounded, size: 40),
+                                      SizedBox(height: 15),
+                                      Text(
+                                        "Select your Image",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  )
+                                  : ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.file(
+                                      File(_pickedImage!.path),
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                    ),
+                                  ),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        //the contents from the list are iterated and assigned to the chip text.
+                        children:
+                            [
+                                  'Technology',
+                                  'Business',
+                                  'Programming',
+                                  'Entertainment',
+                                ]
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        if (selectedTopic.contains(e)) {
+                                          selectedTopic.remove(e);
+                                        } else {
+                                          selectedTopic.add(
+                                            e,
+                                          ); //appends the topics which are clicked.
+                                        }
+                                        setState(() {});
+                                        //print(selectedTopic);
+                                      },
+                                      child: Chip(
+                                        label: Text(e),
+                                        //the selected topics are hightlighted with the gradient color.
+                                        color:
+                                            selectedTopic.contains(e)
+                                                ? const WidgetStatePropertyAll(
+                                                  AppPallete.gradient1,
+                                                )
+                                                : null,
+                                        side:
+                                            selectedTopic.contains(e)
+                                                ? null
+                                                : const BorderSide(
+                                                  color: AppPallete.borderColor,
+                                                ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    //creating the text field to add the title for the blog
+                    BlogEditor(
+                      controller: titleController,
+                      hintText: 'Blog title',
+                    ),
+
+                    SizedBox(height: 20),
+
+                    //creating the text field to add the contents for the blog
+                    BlogEditor(
+                      controller: contentController,
+                      hintText: 'Blog Content',
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

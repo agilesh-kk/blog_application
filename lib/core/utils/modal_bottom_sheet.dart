@@ -1,7 +1,7 @@
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
 
-// creating a reusable modal bottom sheet which has a list of selections 
+// creating a reusable modal bottom sheet which has a list of selections and returns the selected value to the caller
 class ModalBottomSheet extends StatelessWidget {
   final String title;
   final List<BottomSheetOption> options;
