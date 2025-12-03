@@ -17,7 +17,6 @@ class BlogPage extends StatefulWidget {
 }
 
 class _BlogPageState extends State<BlogPage> {
-
   //this runs after the app starts
   @override
   void initState() {
@@ -33,31 +32,37 @@ class _BlogPageState extends State<BlogPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               context.goNamed(AddNewBlogPage.pageName);
-            }, 
+            },
             icon: Icon(Icons.add_circle),
-          )
+          ),
         ],
       ),
       body: BlocConsumer<BlogBloc, BlogState>(
         listener: (context, state) {
-          if(state is BlogFailure){
+          if (state is BlogFailure) {
             return showSnackbar(context, state.error);
           }
-          
         },
         builder: (context, state) {
-          if(state is BlogLoading){
+          if (state is BlogLoading) {
             return const Loader();
           }
-          if(state is BlogsDisplaySuccess){
+          if (state is BlogsDisplaySuccess) {
             return ListView.builder(
               itemCount: state.blogs.length,
               itemBuilder: (context, index) {
                 final blog = state.blogs[index];
-                return BlogCard(blog: blog, color: AppPallete.gradient1);
-              }
+                return BlogCard(
+                  blog: blog,
+                  color:
+                    //changing the color according to the index of the cards
+                      index % 2 == 0
+                          ? AppPallete.gradient1
+                          : AppPallete.gradient2
+                );
+              },
             );
           }
           return const SizedBox();
