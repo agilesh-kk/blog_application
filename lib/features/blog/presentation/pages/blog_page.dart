@@ -50,19 +50,21 @@ class _BlogPageState extends State<BlogPage> {
             return const Loader();
           }
           if (state is BlogsDisplaySuccess) {
-            return ListView.builder(
-              itemCount: state.blogs.length,
-              itemBuilder: (context, index) {
-                final blog = state.blogs[index];
-                return BlogCard(
-                  blog: blog,
-                  color:
-                    //changing the color according to the index of the cards
-                      index % 2 == 0
-                          ? AppPallete.gradient1
-                          : AppPallete.gradient2
-                );
-              },
+            return Scrollbar(
+              child: ListView.builder(
+                itemCount: state.blogs.length,
+                itemBuilder: (context, index) {
+                  final blog = state.blogs[index];
+                  return BlogCard(
+                    blog: blog,
+                    color:
+                      //changing the color according to the index of the cards
+                        index % 2 == 0
+                            ? AppPallete.gradient1
+                            : AppPallete.gradient2
+                  );
+                },
+              ),
             );
           }
           return const SizedBox();
