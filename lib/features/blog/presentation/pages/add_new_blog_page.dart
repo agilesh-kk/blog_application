@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
+import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/image_picker_service.dart';
 import 'package:blog_app/core/utils/modal_bottom_sheet.dart';
@@ -179,12 +180,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                       child: Row(
                         //the contents from the list are iterated and assigned to the chip text.
                         children:
-                            [
-                                  'Technology',
-                                  'Business',
-                                  'Programming',
-                                  'Entertainment',
-                                ]
+                            Constants.topics
                                 .map(
                                   (e) => Padding(
                                     padding: const EdgeInsets.all(5.0),

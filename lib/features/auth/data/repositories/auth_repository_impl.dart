@@ -1,3 +1,4 @@
+import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/errors/exceptions.dart';
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/core/network/connection_checker.dart';
@@ -6,7 +7,7 @@ import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/features/auth/data/model/user_model.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as sb;
+//import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 //import 'package:fpdart/src/either.dart';
 
 //implementations of the interfaces created in domain layer
@@ -80,15 +81,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, User>> _getuser(Future<User> Function()fn) async {
     try{
       if(!await(connectionChecker.isConnected)){
-        return left(Failure('No internet connection'));
+        return left(Failure(Constants.noConnectionErrorMessage));
       }
 
       final user = await fn();
       return right(user); //right function gives success message, the argument passed inside the right() is received as success
     }
-    on sb.AuthException catch(e){
-      return left(Failure(e.message));
-    }
+    
     on ServerExceptions catch (e){
       return left(Failure(e.message)); //returns a Failure class message
     }

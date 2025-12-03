@@ -24,7 +24,10 @@ android {
         applicationId = "com.example.blog_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // isar_flutter_libs requires minSdk 23. Override flutter default to ensure
+        // the library can be merged properly. If you need to support older devices
+        // consider using a different library or a conditional implementation.
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
