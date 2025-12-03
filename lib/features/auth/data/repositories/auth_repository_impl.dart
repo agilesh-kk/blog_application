@@ -1,7 +1,9 @@
 import 'package:blog_app/core/errors/exceptions.dart';
 import 'package:blog_app/core/errors/failure.dart';
+import 'package:blog_app/core/network/connection_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_sources.dart';
 import 'package:blog_app/core/common/entities/user.dart';
+import 'package:blog_app/features/auth/data/model/user_model.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
@@ -10,11 +12,32 @@ import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 //implementations of the interfaces created in domain layer
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSources remoteDataSources;
-  const AuthRepositoryImpl(this.remoteDataSources);
+  final ConnectionChecker connectionChecker;
+  const AuthRepositoryImpl(this.remoteDataSources, this.connectionChecker);
 
   @override
   Future<Either<Failure, User>> currentUser() async {
     try{
+      //no internet part
+      if(!await(connectionChecker.isConnected)){
+        //intialising the session variablle with the currentUserSession
+        final session = remoteDataSources.curretnUserSession;
+
+        //if the user not logged in
+        if(session == null){
+          return left(Failure('User not logged in!'));  
+        }
+        
+        //if the user was logged in when the internet was present
+        return right(
+          UserModel(
+            id: session.user.id,
+            name: '',
+            email: session.user.email ?? '',
+          )
+        );
+      }
+      
       final user = await remoteDataSources.getCurrentUserData();
       if(user==null){
         return left(Failure('User not logged in!'));
@@ -56,6 +79,10 @@ class AuthRepositoryImpl implements AuthRepository {
   //created a function for try and catch, since it is repeatedly used in the codes, also making it easier to add any othre exceptions and other validations.
   Future<Either<Failure, User>> _getuser(Future<User> Function()fn) async {
     try{
+      if(!await(connectionChecker.isConnected)){
+        return left(Failure('No internet connection'));
+      }
+
       final user = await fn();
       return right(user); //right function gives success message, the argument passed inside the right() is received as success
     }
