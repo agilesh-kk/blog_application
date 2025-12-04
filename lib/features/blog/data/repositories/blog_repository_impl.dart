@@ -72,11 +72,12 @@ class BlogRepositoryImpl implements BlogRepository {
       //checking the internet connection
       if(!await(connectionChecker.isConnected)){
         final blogs = blogLocalDataSource.loadBlogs();
+        //print(blogs);
         return right(blogs);
       }
       final blogs = await blogRemoteDataSource.getAllBlogs(); //fetches the blogs from the supabase
       blogLocalDataSource.uploadlocalBlogs(blogs: blogs); //loads the blogs to local storage
-
+      //print(blogs);
       return right(blogs);
     } on ServerExceptions catch (e) {
       return left(Failure(e.message));

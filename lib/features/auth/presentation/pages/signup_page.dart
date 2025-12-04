@@ -5,6 +5,7 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_fields.dart';
 import 'package:blog_app/features/auth/presentation/widgets/auth_gradient_button.dart';
+import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -49,6 +50,10 @@ class _SignupPageState extends State<SignupPage> {
           builder: (context, state){
             if(state is AuthLoading){
               return const Loader();
+            }
+            //if sigining up the user is successful then it routes to blogpage.
+            else if(state is AuthSuccess){
+              context.goNamed(BlogPage.pageName);
             }
 
             return Form(

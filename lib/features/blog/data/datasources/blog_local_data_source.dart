@@ -22,6 +22,7 @@ class BlogLocalDataSourceImpl implements BlogLocalDataSource{
         blogs.add(BlogModel.fromJson(box.get(i.toString()))); //the map is converted to a list
       }
     });
+    //print(blogs.map((e) => e.toJson()).toList());
 
     return blogs;
   }

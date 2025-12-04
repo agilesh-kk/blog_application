@@ -2,6 +2,7 @@ import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/calculate_reading_time.dart';
 import 'package:blog_app/core/utils/date_format.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BlogViewerPage extends StatelessWidget {
@@ -43,7 +44,23 @@ class BlogViewerPage extends StatelessWidget {
                 //image of the blog
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(blog.imageUrl),
+                  child: CachedNetworkImage(
+                    // The URL from your Hive/Supabase model
+                    imageUrl: blog.imageUrl, 
+                    
+                    // What to show while loading
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    
+                    // CRITICAL: What to show if offline/error
+                    errorWidget: (context, url, error) => const Center(
+                      child: Icon(Icons.cloud_off, size: 50, color: Colors.grey),
+                    ),
+                    
+                    // Optional: Make it look nice
+                    fit: BoxFit.cover, 
+                  ),
                 ),
                 const SizedBox(height: 15,),
         

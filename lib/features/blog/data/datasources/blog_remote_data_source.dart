@@ -19,7 +19,18 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
   @override
   Future<BlogModel> uploadBlog(BlogModel blog) async {
     try {
-      final blogData = await supabaseClient.from('blogs').insert(blog.toJson()).select();
+      // 1. Create a generic Map from the blog model
+      // We use a Map<String, dynamic> so we can modify it
+      final blogMap = blog.toJson();
+
+      // 2. Remove the field that Supabase hates
+      blogMap.remove('poster_name');
+
+      // 3. Send the CLEANED map (blogMap) to Supabase
+      final blogData = await supabaseClient
+        .from('blogs')
+        .insert(blogMap) // <--- Send the map, NOT blog.toJson()
+        .select();
 
       return BlogModel.fromJson(blogData.first);
     }
