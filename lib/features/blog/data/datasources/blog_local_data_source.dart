@@ -1,42 +1,43 @@
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:hive/hive.dart';
-//local storage is achieved using hive.
 
-//interface for local storages
 abstract interface class BlogLocalDataSource {
-  void uploadlocalBlogs({required List<BlogModel> blogs});
+  // NOTE: Writing to storage is async, so we return Future<void>
+  Future<void> uploadLocalBlogs({required List<BlogModel> blogs});
+  
+  // NOTE: Reading from an open Hive box is synchronous (instant)
   List<BlogModel> loadBlogs();
 }
 
-class BlogLocalDataSourceImpl implements BlogLocalDataSource{
+class BlogLocalDataSourceImpl implements BlogLocalDataSource {
   final Box box;
   BlogLocalDataSourceImpl(this.box);
 
   @override
   List<BlogModel> loadBlogs() {
-    List<BlogModel> blogs = [];
+    // 1. Check if box is empty to avoid errors
+    if (box.isEmpty) {
+      return [];
+    }
 
-    //retrieving the blogs from the local storage 
-    box.read((){
-      for(int i=0; i<box.length; i++){
-        blogs.add(BlogModel.fromJson(box.get(i.toString()))); //the map is converted to a list
-      }
-    });
-    //print(blogs.map((e) => e.toJson()).toList());
-
-    return blogs;
+    // 2. Use 'box.values' to get all data at once (no need for loops/indices)
+    return box.values.map((blogData) {
+      // 3. Hive stores data as 'dynamic', so we cast it to Map<String, dynamic>
+      // to ensure it matches what BlogModel.fromJson expects.
+      return BlogModel.fromJson(Map<String, dynamic>.from(blogData));
+    }).toList();
   }
 
   @override
-  void uploadlocalBlogs({required List<BlogModel> blogs}) {
-    box.clear(); //clears the existing blogs
+  Future<void> uploadLocalBlogs({required List<BlogModel> blogs}) async {
+    // 1. Clear previous cache asynchronously
+    await box.clear();
 
-    //storing the blogs to the storage
-    box.write((){
-      for(int i=0;i<blogs.length;i++){
-        box.put(i.toString(), blogs[i].toJson()); //the values are stored in json format
-      }
-    });
+    // 2. Convert all models to JSON format
+    // 'addAll' is much faster than looping through 'put'
+    final blogsJson = blogs.map((blog) => blog.toJson()).toList();
+    
+    // 3. Write all to storage
+    await box.addAll(blogsJson);
   }
-
 }

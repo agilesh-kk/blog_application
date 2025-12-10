@@ -11,7 +11,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-//implementation of blogRepository from the domain layer.
 class BlogRepositoryImpl implements BlogRepository {
   final BlogRemoteDataSource blogRemoteDataSource;
   final ConnectionChecker connectionChecker;
@@ -32,9 +31,7 @@ class BlogRepositoryImpl implements BlogRepository {
     required List<String> topics,
   }) async {
     try {
-
-      //checking the internet connection
-      if(!await(connectionChecker.isConnected)){
+      if (!await (connectionChecker.isConnected)) {
         return left(Failure(Constants.noConnectionErrorMessage));
       }
 
@@ -43,23 +40,20 @@ class BlogRepositoryImpl implements BlogRepository {
         posterId: posterId,
         title: title,
         content: content,
-        imageUrl: '', //will be updated later on
+        imageUrl: '', 
         topics: topics,
         updatedAt: DateTime.now(),
       );
 
-      //uploads the image to supabase and gives the imageUrl
       final imageUrl = await blogRemoteDataSource.uploadImage(
         image: image,
         blog: blogModel,
       );
 
-      //this updates the imageUrl
       blogModel = blogModel.copyWith(imageUrl: imageUrl);
 
-      //uploading the blog to the database
       final uploadedBlog = await blogRemoteDataSource.uploadBlog(blogModel);
-      return right(uploadedBlog); //returning the blog
+      return right(uploadedBlog);
     } on ServerExceptions catch (e) {
       return left(Failure(e.message));
     }
@@ -68,16 +62,20 @@ class BlogRepositoryImpl implements BlogRepository {
   @override
   Future<Either<Failure, List<Blog>>> getAllBlogs() async {
     try {
-
-      //checking the internet connection
-      if(!await(connectionChecker.isConnected)){
+      // 1. Check Internet Connection
+      if (!await (connectionChecker.isConnected)) {
+        // LOAD LOCAL: Synchronous call (reading from memory)
         final blogs = blogLocalDataSource.loadBlogs();
-        //print(blogs);
         return right(blogs);
       }
-      final blogs = await blogRemoteDataSource.getAllBlogs(); //fetches the blogs from the supabase
-      blogLocalDataSource.uploadlocalBlogs(blogs: blogs); //loads the blogs to local storage
-      //print(blogs);
+
+      // 2. Fetch from Remote (Supabase)
+      final blogs = await blogRemoteDataSource.getAllBlogs();
+
+      // 3. CACHE LOCAL: Await this because it is now a Future
+      // We use 'await' to ensure data is safely written before moving on
+      await blogLocalDataSource.uploadLocalBlogs(blogs: blogs);
+
       return right(blogs);
     } on ServerExceptions catch (e) {
       return left(Failure(e.message));
