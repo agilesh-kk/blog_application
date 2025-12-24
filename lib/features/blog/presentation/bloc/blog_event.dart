@@ -20,3 +20,8 @@ final class UploadBlogEvent extends BlogEvent {
 }
 
 final class GetAllBlogsEvent extends BlogEvent {}
+
+final class YourBlogsEvent extends BlogEvent{
+  final String posterId;
+  YourBlogsEvent({required this.posterId});
+}

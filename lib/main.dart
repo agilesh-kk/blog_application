@@ -1,4 +1,5 @@
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
+import 'package:blog_app/core/common/widgets/bottom_navigation_shell.dart';
 
 import 'package:blog_app/core/theme/app_theme.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
@@ -9,6 +10,8 @@ import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_viewer_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/search_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/your_profile_page.dart';
 import 'package:blog_app/init_dependencies.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,7 +68,7 @@ class _MainAppState extends State<MainApp> {
   }
 
   final _router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/home',
     redirect: (context, state) {
       final isSignedIn = context.read<AppUserCubit>().state is AppUserIsSignedin;
       
@@ -108,28 +111,62 @@ class _MainAppState extends State<MainApp> {
           ),
         ],
       ),
-      // Named route for blog home page
-      GoRoute(
-        name: BlogPage.pageName,
-        path: BlogPage.pageName,
-        builder: (context, state) => const BlogPage(),
-        routes: [
-          GoRoute(
-            name: AddNewBlogPage.pageName,
-            path: AddNewBlogPage.pageName,
-            builder: (context, state) => const AddNewBlogPage(),
+
+      //Shell routing for navigation bar.
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return BottomNavigationShell(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              // Named route for blog home page
+              GoRoute(
+                name: BlogPage.pageName,
+                path: BlogPage.pageName,
+                builder: (context, state) => const BlogPage(),
+                routes: [
+                  GoRoute(
+                    name: AddNewBlogPage.pageName,
+                    path: AddNewBlogPage.pageName,
+                    builder: (context, state) => const AddNewBlogPage(),
+                  ),
+                  GoRoute(
+                    name: BlogViewerPage.pageName,
+                    path: BlogViewerPage.pageName,
+                    builder: (context, state) {
+                      //adding the blog while routing
+                      final blog = state.extra as Blog;
+                      return BlogViewerPage(blog: blog);
+                    },
+                  )
+                ],
+              ),
+            ]
           ),
-          GoRoute(
-            name: BlogViewerPage.pageName,
-            path: BlogViewerPage.pageName,
-            builder: (context, state) {
-              //adding the blog while routing
-              final blog = state.extra as Blog;
-              return BlogViewerPage(blog: blog);
-            },
-          )
-        ],
-      ),      
+
+          //brach for seach page
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: SearchPage.pageName,
+                path: SearchPage.pageName,
+                builder: (context, state) => const SearchPage(),
+              )
+            ],
+          ),
+
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: YourProfilePage.pageName,
+                path: YourProfilePage.pageName,
+                builder: (context, state) => const YourProfilePage(),
+              )
+            ],
+          ),
+        ]
+      ),   
     ],
   );
 }

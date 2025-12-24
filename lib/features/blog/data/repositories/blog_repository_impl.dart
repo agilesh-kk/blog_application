@@ -81,4 +81,16 @@ class BlogRepositoryImpl implements BlogRepository {
       return left(Failure(e.message));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<Blog>>> yourBlogs({required String posterId}) async{
+    try{
+      final blogs = await blogRemoteDataSource.yourBlogs(posterId: posterId);
+      return right(blogs);
+    }
+    on ServerExceptions catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
 }
