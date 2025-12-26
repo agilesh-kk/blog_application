@@ -92,7 +92,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
   @override
   Future<List<BlogModel>> yourBlogs({required String posterId}) async {
     try{
-      final blogs = await supabaseClient.from('blogs').select('*, profiles').eq('poster_id', posterId);
+      final blogs = await supabaseClient.from('blogs').select('*, profiles(name)').eq('poster_id', posterId);
 
       return blogs
           .map(

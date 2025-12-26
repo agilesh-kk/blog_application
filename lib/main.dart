@@ -127,11 +127,6 @@ class _MainAppState extends State<MainApp> {
                 builder: (context, state) => const BlogPage(),
                 routes: [
                   GoRoute(
-                    name: AddNewBlogPage.pageName,
-                    path: AddNewBlogPage.pageName,
-                    builder: (context, state) => const AddNewBlogPage(),
-                  ),
-                  GoRoute(
                     name: BlogViewerPage.pageName,
                     path: BlogViewerPage.pageName,
                     builder: (context, state) {
@@ -145,7 +140,18 @@ class _MainAppState extends State<MainApp> {
             ]
           ),
 
-          //brach for seach page
+          //branch for add-new-blog-page
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                name: AddNewBlogPage.pageName,
+                path: AddNewBlogPage.pageName,
+                builder: (context, state) => const AddNewBlogPage(),
+              ),
+            ],
+          ),
+
+          //brach for serach page
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -156,13 +162,25 @@ class _MainAppState extends State<MainApp> {
             ],
           ),
 
+          //branch for your profile
           StatefulShellBranch(
             routes: [
               GoRoute(
                 name: YourProfilePage.pageName,
                 path: YourProfilePage.pageName,
                 builder: (context, state) => const YourProfilePage(),
-              )
+                routes: [
+                  GoRoute(
+                    name: 'blog-viewer-profile', //did this way to add duplicate routes.
+                    path: '/blog-viewer',
+                    builder: (context, state) {
+                      //adding the blog while routing
+                      final blog = state.extra as Blog;
+                      return BlogViewerPage(blog: blog);
+                    },
+                  )
+                ]
+              ),
             ],
           ),
         ]

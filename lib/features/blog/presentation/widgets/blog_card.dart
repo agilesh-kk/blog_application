@@ -7,18 +7,19 @@ import 'package:go_router/go_router.dart';
 class BlogCard extends StatelessWidget {
   final Blog blog;
   final Color color;
-  const BlogCard({super.key, required this.blog, required this.color});
+  final VoidCallback onBlogTap;
+  const BlogCard({
+    super.key, 
+    required this.blog, 
+    required this.color, 
+    required this.onBlogTap
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        //passing the blog to the blogviewerpage.
-        context.goNamed(
-          BlogViewerPage.pageName, 
-          extra: blog,
-        );
-      },
+      //on tap function to decide whether go to allblogs or the blogs published by the user from the yourprofile tab.
+      onTap: onBlogTap,
       child: Container(
         height: 200,
         margin: EdgeInsets.all(16).copyWith(

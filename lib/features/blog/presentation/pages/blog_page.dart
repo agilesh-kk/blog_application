@@ -3,6 +3,8 @@ import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/blog_viewer_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/your_profile_page.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,14 +32,6 @@ class _BlogPageState extends State<BlogPage> {
       appBar: AppBar(
         title: const Text("Blog App"),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.goNamed(AddNewBlogPage.pageName);
-            },
-            icon: Icon(Icons.add_circle),
-          ),
-        ],
       ),
       body: BlocConsumer<BlogBloc, BlogState>(
         listener: (context, state) {
@@ -60,6 +54,9 @@ class _BlogPageState extends State<BlogPage> {
                   itemBuilder: (context, index) {
                     final blog = state.blogs[index];
                     return BlogCard(
+                      onBlogTap: (){
+                        context.goNamed(BlogViewerPage.pageName, extra: blog);
+                      },
                       blog: blog,
                       color:
                         //changing the color according to the index of the cards
