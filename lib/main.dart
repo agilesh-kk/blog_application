@@ -2,6 +2,7 @@ import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/bottom_navigation_shell.dart';
 
 import 'package:blog_app/core/theme/app_theme.dart';
+import 'package:blog_app/core/utils/go_router_refresh_stream.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/auth/presentation/pages/signup_page.dart';
@@ -49,11 +50,20 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-
+  late final GoRouterRefreshStream _refreshStream; //declaring the refreshstream object
   @override
   void initState() {
     super.initState();
     context.read<AuthBloc>().add(AuthUserIsSignedIn());
+    //This tells GoRouter: "Whenever AppUserCubit changes, check the redirects!"
+    _refreshStream = GoRouterRefreshStream(context.read<AppUserCubit>().stream);
+  }
+
+  @override
+  void dispose() {
+    // 3. Dispose the listener to prevent memory leaks
+    _refreshStream.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,7 +78,7 @@ class _MainAppState extends State<MainApp> {
   }
 
   final _router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: BlogPage.pageName,
     redirect: (context, state) {
       final isSignedIn = context.read<AppUserCubit>().state is AppUserIsSignedin;
       
@@ -76,7 +86,7 @@ class _MainAppState extends State<MainApp> {
       if (isSignedIn && 
           (state.matchedLocation == SigninPage.pageName || 
            state.matchedLocation == '/${SignupPage.pageName}')) {
-        return '/';
+        return BlogPage.pageName;
       }
 
       // If user is not logged in and tries to access protected pages
@@ -87,18 +97,18 @@ class _MainAppState extends State<MainApp> {
       return null; // no redirect needed
     },
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => BlocSelector<AppUserCubit, AppUserState, bool>(
-          selector: (state) => state is AppUserIsSignedin,
-          builder: (context, isLoggedIn) {
-            // If not logged in, redirect to sign in page
-            if (!isLoggedIn) return const SigninPage();
-            // Replace this with your home page
-            return BlogPage();
-          },
-        ),
-      ),
+      // GoRoute(
+      //   path: '/',
+      //   builder: (context, state) => BlocSelector<AppUserCubit, AppUserState, bool>(
+      //     selector: (state) => state is AppUserIsSignedin,
+      //     builder: (context, isLoggedIn) {
+      //       // If not logged in, redirect to sign in page
+      //       if (!isLoggedIn) return const SigninPage();
+      //       // Replace this with your home page
+      //       return BlogPage();
+      //     },
+      //   ),
+      // ),
       GoRoute(
         name: SigninPage.pageName,
         path: SigninPage.pageName,

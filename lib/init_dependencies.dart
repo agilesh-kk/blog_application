@@ -7,6 +7,7 @@ import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_signin.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
+import 'package:blog_app/features/auth/domain/usecases/user_signout.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/blog/data/datasources/blog_local_data_source.dart';
 import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
