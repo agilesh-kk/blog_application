@@ -25,6 +25,7 @@ dependencies:
   path_provider: ^2.1.0
   cached_network_image: ^3.4.1
   sembast: ^3.7.1
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +34,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/blogicon_crop.png"
+  # For Android 8.0+ Adaptive Icons (prevents white circle background):
+  adaptive_icon_background: "#FFFFFF" # or path to an image
+  adaptive_icon_foreground: "assets/blogicon_crop.png"
