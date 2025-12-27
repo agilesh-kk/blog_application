@@ -6,7 +6,8 @@ class UserModel extends User {
   factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'] ?? '', 
-      name: map['name'] ?? '', 
+      //to get the user's name from the usermetadata since it is not getting updated in the appusercubit.
+      name: map['name'] ?? map['raw_user_meta_data']?['name'] ?? map['user_metadata']?['name'] ?? '',  
       email: map['email'] ?? '',
     );
   }

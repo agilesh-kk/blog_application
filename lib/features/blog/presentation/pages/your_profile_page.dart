@@ -48,7 +48,7 @@ class _YourProfilePageState extends State<YourProfilePage> {
     return Scaffold(
       appBar: AppBar(
         //to display the name of the user
-        title: Text(currentUser.name),
+        title: Text(appUserState.user.name),
         centerTitle: true,
         actions: [
           PopupMenuButton<String>(

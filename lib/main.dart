@@ -77,8 +77,9 @@ class _MainAppState extends State<MainApp> {
     );
   }
 
-  final _router = GoRouter(
+  late final _router = GoRouter(
     initialLocation: BlogPage.pageName,
+    refreshListenable: _refreshStream, //added the refreshStream to the router
     redirect: (context, state) {
       final isSignedIn = context.read<AppUserCubit>().state is AppUserIsSignedin;
       
@@ -98,7 +99,7 @@ class _MainAppState extends State<MainApp> {
     },
     routes: [
       // GoRoute(
-      //   path: '/',
+      //   path: BlogPage.pageName,
       //   builder: (context, state) => BlocSelector<AppUserCubit, AppUserState, bool>(
       //     selector: (state) => state is AppUserIsSignedin,
       //     builder: (context, isLoggedIn) {

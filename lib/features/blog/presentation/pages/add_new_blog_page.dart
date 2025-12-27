@@ -122,6 +122,14 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
           }
           else if(state is BlogUploadSuccess){
             //context.read<BlogBloc>().add(GetAllBlogsEvent());
+            titleController.clear();
+            contentController.clear();
+            if(mounted){
+              setState(() {
+                _pickedImage = null;
+                selectedTopic = [];
+              });
+            }
             context.goNamed(BlogPage.pageName); //redirecting to the blog page.
           }
         },
