@@ -6,6 +6,7 @@ import 'package:blog_app/core/constants/constants.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/image_picker_service.dart';
 import 'package:blog_app/core/utils/modal_bottom_sheet.dart';
+import 'package:blog_app/core/utils/show_confirmation_dialog.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
@@ -104,8 +105,11 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              uploadBlog();
+            onPressed: () async{
+              final uploadOk = await showConfirmationDialog(context, 'Sure uploading?', Icons.upload);
+              if(uploadOk == true){
+                uploadBlog();
+              }
             },
             icon: Icon(Icons.done_rounded),
           ),

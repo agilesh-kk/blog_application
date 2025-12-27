@@ -1,6 +1,7 @@
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
+import 'package:blog_app/core/utils/show_confirmation_dialog.dart';
 import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
@@ -52,10 +53,14 @@ class _YourProfilePageState extends State<YourProfilePage> {
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert), // The three dots icon
-            onSelected: (value) {
+            onSelected: (value) async {
               if (value == 'logout') {
                 // Trigger the logout event in your Bloc
-                context.read<AuthBloc>().add(AuthUserSignOut());
+                final shouldLogout = await showConfirmationDialog(context, 'Log out?', Icons.warning_amber_outlined);
+                if(shouldLogout == true && context.mounted){
+                  context.read<AuthBloc>().add(AuthUserSignOut());
+                }
+                //context.read<AuthBloc>().add(AuthUserSignOut());
               }
             },
             itemBuilder: (BuildContext context) {
@@ -64,7 +69,7 @@ class _YourProfilePageState extends State<YourProfilePage> {
                   value: 'logout',
                   child: Row(
                     children: [
-                      Icon(Icons.exit_to_app, color: Colors.black),
+                      Icon(Icons.exit_to_app, color: AppPallete.gradient3),
                       SizedBox(width: 8),
                       Text('Logout'),
                     ],
