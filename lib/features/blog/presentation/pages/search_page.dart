@@ -16,6 +16,9 @@ class _SearchPageState extends State<SearchPage> {
         title: Text("Search"),
         centerTitle : true,
       ),
+      body: Column(
+        
+      ),
     );
   }
 }

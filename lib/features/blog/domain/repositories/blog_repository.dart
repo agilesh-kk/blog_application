@@ -1,5 +1,6 @@
 import 'package:blog_app/core/errors/failure.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:blog_app/features/blog/domain/entities/users.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,4 +17,6 @@ abstract interface class BlogRepository {
   Future<Either<Failure, List<Blog>>> getAllBlogs();
 
   Future<Either<Failure, List<Blog>>> yourBlogs({required String posterId});
+
+  Future<Either<Failure, List<Users>>> listOfUsers();
 }

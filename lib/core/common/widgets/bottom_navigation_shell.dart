@@ -39,10 +39,10 @@ class BottomNavigationShell extends StatelessWidget {
               icon: Icon(Icons.add_circle_outline_outlined), 
               label: ''
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search_outlined), 
-              label: ''
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.search_outlined), 
+            //   label: ''
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_2_outlined), 
               label: ''

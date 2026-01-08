@@ -6,6 +6,7 @@ import 'package:blog_app/features/blog/data/datasources/blog_local_data_source.d
 import 'package:blog_app/features/blog/data/datasources/blog_remote_data_source.dart';
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:blog_app/features/blog/domain/entities/users.dart';
 import 'package:blog_app/features/blog/domain/repositories/blog_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:image_picker/image_picker.dart';
@@ -87,6 +88,17 @@ class BlogRepositoryImpl implements BlogRepository {
     try{
       final blogs = await blogRemoteDataSource.yourBlogs(posterId: posterId);
       return right(blogs);
+    }
+    on ServerExceptions catch (e) {
+      return left(Failure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Users>>> listOfUsers() async {
+    try{
+      final users = await blogRemoteDataSource.getAllUsers();
+      return right(users);
     }
     on ServerExceptions catch (e) {
       return left(Failure(e.message));

@@ -163,15 +163,15 @@ class _MainAppState extends State<MainApp> {
           ),
 
           //brach for serach page
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                name: SearchPage.pageName,
-                path: SearchPage.pageName,
-                builder: (context, state) => const SearchPage(),
-              )
-            ],
-          ),
+          // StatefulShellBranch(
+          //   routes: [
+          //     GoRoute(
+          //       name: SearchPage.pageName,
+          //       path: SearchPage.pageName,
+          //       builder: (context, state) => const SearchPage(),
+          //     )
+          //   ],
+          // ),
 
           //branch for your profile
           StatefulShellBranch(
