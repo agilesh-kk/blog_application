@@ -25,6 +25,7 @@ Future<bool?> showConfirmationDialog (BuildContext context, String text, IconDat
             onPressed: (){
               Navigator.of(context).pop(true);
             },
+            
             child: Text('Yes'),
           ),
           TextButton(

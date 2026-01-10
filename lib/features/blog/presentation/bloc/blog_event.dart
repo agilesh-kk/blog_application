@@ -10,6 +10,7 @@ final class UploadBlogEvent extends BlogEvent {
   final XFile image;
   final List<String> topics;
 
+
   UploadBlogEvent({
     required this.posterId,
     required this.title,

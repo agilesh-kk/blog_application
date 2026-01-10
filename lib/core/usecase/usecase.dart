@@ -7,3 +7,4 @@ abstract interface class UseCase<SuccessType, Params>{
 }
 
 class NoParams{}
+

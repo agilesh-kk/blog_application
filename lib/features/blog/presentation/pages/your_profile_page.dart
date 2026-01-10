@@ -97,6 +97,7 @@ class _YourProfilePageState extends State<YourProfilePage> {
             if (state is BlogLoading) {
               return const Loader();
             }
+            
             if (state is BlogsDisplaySuccess) {
               final userBlogs = state.blogs
                   .where((blog) => blog.posterId == currentUser.id)

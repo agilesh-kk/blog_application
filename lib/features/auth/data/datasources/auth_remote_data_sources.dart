@@ -53,6 +53,7 @@ class AuthRemoteDataSourcesImpl implements AuthRemoteDataSources {
     }
   }
 
+
   @override
   Future<UserModel> signUpWithEmailPassword({
     required String name,

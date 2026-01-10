@@ -192,6 +192,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
+                        
                         //the contents from the list are iterated and assigned to the chip text.
                         children:
                             Constants.topics

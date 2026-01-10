@@ -19,3 +19,4 @@ final class AuthFailure extends AuthState {
   const AuthFailure(this.message);
 }
 
+

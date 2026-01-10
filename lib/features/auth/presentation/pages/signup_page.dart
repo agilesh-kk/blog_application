@@ -46,6 +46,7 @@ class _SignupPageState extends State<SignupPage> {
             if(state is AuthFailure){
               showSnackbar(context, state.message);
             }
+            
             //if sigining up the user is successful then it routes to blogpage.
             else if(state is AuthSuccess){
               context.goNamed(BlogPage.pageName);

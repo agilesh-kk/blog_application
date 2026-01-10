@@ -8,6 +8,7 @@ class Blog {
   final DateTime updatedAt;
   final String? posterName; //nullable
 
+
   Blog({
     required this.id,
     required this.posterId,

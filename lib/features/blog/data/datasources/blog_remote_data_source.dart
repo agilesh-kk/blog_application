@@ -74,6 +74,7 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
       //since the posterId is the foreign key which refers to the profiles table
       final blogs = await supabaseClient.from('blogs').select('*, profiles(name)');
 
+
       return blogs
           .map(
             (blog) => BlogModel.fromJson(

@@ -13,6 +13,7 @@ class BlogCard extends StatelessWidget {
     required this.onBlogTap
   });
 
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

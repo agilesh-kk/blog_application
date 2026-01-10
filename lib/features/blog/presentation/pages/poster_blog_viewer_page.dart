@@ -20,6 +20,7 @@ class PosterBlogViewerPage extends StatelessWidget {
           style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
+      
       body: Scrollbar(
         child: SingleChildScrollView(
           child: Padding(

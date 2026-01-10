@@ -18,5 +18,6 @@ abstract interface class BlogRepository {
 
   Future<Either<Failure, List<Blog>>> yourBlogs({required String posterId});
 
+
   Future<Either<Failure, List<Users>>> listOfUsers();
 }

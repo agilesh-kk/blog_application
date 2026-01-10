@@ -23,6 +23,7 @@ class AuthFields extends StatelessWidget {
         }
         return null;
       },
+      
       obscureText: isObsucure,
     );
   }

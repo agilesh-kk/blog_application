@@ -14,4 +14,5 @@ class GetAllBlogs implements UseCase<List<Blog>, NoParams>{
     return await blogRepository.getAllBlogs();
   }
   
+  
 }

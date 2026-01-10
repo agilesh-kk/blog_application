@@ -63,6 +63,7 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
+
   @override
   Future<Either<Failure, User>> signUpWithEmailPassword({
     required String name,

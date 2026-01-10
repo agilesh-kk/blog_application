@@ -18,6 +18,7 @@ Future<void> initDependencies() async {
   // 1. Initialize Hive for Flutter (Replaces getApplicationDocumentsDirectory)
   await Hive.initFlutter();
 
+
   // 2. Open the Box explicitly BEFORE registering it
   // This is async, so we must await it here.
   final blogsBox = await Hive.openBox('blogs');

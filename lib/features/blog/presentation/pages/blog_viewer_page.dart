@@ -1,4 +1,3 @@
-import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/calculate_reading_time.dart';
 import 'package:blog_app/core/utils/date_format.dart';

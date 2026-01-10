@@ -1,5 +1,4 @@
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
-import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/core/common/widgets/bottom_navigation_shell.dart';
 
 import 'package:blog_app/core/theme/app_theme.dart';
@@ -15,7 +14,6 @@ import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart
 import 'package:blog_app/features/blog/presentation/pages/blog_viewer_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/poster_blog_viewer_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/poster_page.dart';
-import 'package:blog_app/features/blog/presentation/pages/search_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/your_blogs_viewer_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/your_profile_page.dart';
 import 'package:blog_app/init_dependencies.dart';

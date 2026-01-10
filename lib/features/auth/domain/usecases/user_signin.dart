@@ -16,6 +16,7 @@ class UserSignin implements UseCase<User, UserLoginParams> {
   }
 }
 
+
 class UserLoginParams {
   final String email;
   final String password;

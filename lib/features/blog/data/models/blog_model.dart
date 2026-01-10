@@ -39,6 +39,7 @@ class BlogModel extends Blog {
       posterName: map['poster_name'] ?? '',
     );
   }
+  
 
   //this function is used for updating final fields
   BlogModel copyWith({

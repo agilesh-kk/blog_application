@@ -22,6 +22,7 @@ class PosterPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(posterName),
+        centerTitle : true,
       ),
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {

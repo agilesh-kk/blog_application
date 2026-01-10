@@ -7,3 +7,4 @@ class Users {
     required this.name,
   });
 }
+

@@ -100,6 +100,7 @@ class BlogRepositoryImpl implements BlogRepository {
       final users = await blogRemoteDataSource.getAllUsers();
       return right(users);
     }
+    
     on ServerExceptions catch (e) {
       return left(Failure(e.message));
     }

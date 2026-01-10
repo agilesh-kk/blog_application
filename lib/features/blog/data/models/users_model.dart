@@ -11,6 +11,7 @@ class UsersModel extends Users{
     };
   }
 
+
   factory UsersModel.fromMap(Map<String, dynamic> map) {
     return UsersModel(
       id: map['id'] as String,

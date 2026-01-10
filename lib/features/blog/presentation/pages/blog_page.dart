@@ -46,6 +46,7 @@ class _BlogPageState extends State<BlogPage> {
               onRefresh: () async {
                 context.read<BlogBloc>().add(GetAllBlogsEvent());
               },
+              
               child: Scrollbar(
                 child: ListView.builder(
                   itemCount: state.blogs.length,

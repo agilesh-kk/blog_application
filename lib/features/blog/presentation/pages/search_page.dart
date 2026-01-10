@@ -18,6 +18,7 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Column(
         
+        
       ),
     );
   }

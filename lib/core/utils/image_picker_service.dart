@@ -31,6 +31,7 @@ class ImagePickerService {
     }
   }
 
+
   /// Pick image from gallery
   /// Returns XFile if successful, null if cancelled or error
   Future<XFile?> pickFromGallery({

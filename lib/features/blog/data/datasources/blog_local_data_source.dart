@@ -20,6 +20,7 @@ class BlogLocalDataSourceImpl implements BlogLocalDataSource {
       return [];
     }
 
+
     // 2. Use 'box.values' to get all data at once (no need for loops/indices)
     return box.values.map((blogData) {
       // 3. Hive stores data as 'dynamic', so we cast it to Map<String, dynamic>

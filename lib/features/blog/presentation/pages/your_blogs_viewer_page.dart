@@ -2,10 +2,8 @@ import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/calculate_reading_time.dart';
 import 'package:blog_app/core/utils/date_format.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/presentation/pages/poster_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class YourBlogsViewerPage extends StatelessWidget {
   static const String pageName = '/your-blog-viewer';

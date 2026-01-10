@@ -43,6 +43,7 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       ),
     );
 
+
     res.fold((l) => emit(BlogFailure(l.message)), (r) => emit(BlogUploadSuccess()));
 
     final res2 = await _getAllBlogs(NoParams());
