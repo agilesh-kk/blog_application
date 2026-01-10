@@ -19,7 +19,7 @@ class BlogCard extends StatelessWidget {
       //on tap function to decide whether go to allblogs or the blogs published by the user from the yourprofile tab.
       onTap: onBlogTap,
       child: Container(
-        height: 200,
+        height: 150,
         margin: EdgeInsets.all(16).copyWith(
           bottom: 5,
         ),
@@ -52,11 +52,15 @@ class BlogCard extends StatelessWidget {
                             .toList(),
                   ),
                 ),
-                Text(
-                  blog.title, 
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  //reverse: true,
+                  child: Text(
+                    blog.title, 
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

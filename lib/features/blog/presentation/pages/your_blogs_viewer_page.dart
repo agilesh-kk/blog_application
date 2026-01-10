@@ -1,26 +1,19 @@
-import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/core/theme/app_pallete.dart';
 import 'package:blog_app/core/utils/calculate_reading_time.dart';
 import 'package:blog_app/core/utils/date_format.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
-import 'package:blog_app/features/blog/domain/entities/users.dart';
 import 'package:blog_app/features/blog/presentation/pages/poster_page.dart';
-import 'package:blog_app/features/blog/presentation/pages/your_profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
 
-class BlogViewerPage extends StatelessWidget {
-  static const String pageName = '/blog-viewer';
+class YourBlogsViewerPage extends StatelessWidget {
+  static const String pageName = '/your-blog-viewer';
   final Blog blog; //requesting the blog
-  const BlogViewerPage({super.key, required this.blog});
+  const YourBlogsViewerPage({super.key, required this.blog});
 
   @override
   Widget build(BuildContext context) {
-    final appUserState = context.watch<AppUserCubit>().state;
-    final posterName = blog.posterName ?? 'Unknown';
     return Scaffold(
       appBar: AppBar(
         //title of the blog
@@ -39,27 +32,9 @@ class BlogViewerPage extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 //name of the poster
-                GestureDetector(
-                  onTap: (){
-                    if(appUserState is AppUserIsSignedin){
-                      if(appUserState.user.id == blog.posterId){
-                        context.goNamed(YourProfilePage.pageName);
-                      }
-                      else{
-                        context.pushNamed(
-                          PosterPage.pageName, 
-                          extra: Users(
-                            id: blog.posterId, 
-                            name: posterName,
-                          )
-                        );
-                      }
-                    }
-                  },
-                  child: Text(
-                    'By ${blog.posterName}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
+                Text(
+                  'By ${blog.posterName}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 8),
 

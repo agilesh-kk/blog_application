@@ -6,6 +6,7 @@ import 'package:blog_app/core/utils/show_snackbar.dart';
 import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
+import 'package:blog_app/features/blog/presentation/pages/your_blogs_viewer_page.dart';
 import 'package:blog_app/features/blog/presentation/widgets/blog_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -107,7 +108,7 @@ class _YourProfilePageState extends State<YourProfilePage> {
                     final blog = userBlogs[index];
                     return BlogCard(
                       onBlogTap: () {
-                        context.goNamed('blog-viewer-profile', extra: blog);
+                        context.goNamed(YourBlogsViewerPage.pageName, extra: blog);
                       },
                       blog: blog,
                       color:

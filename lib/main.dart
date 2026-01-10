@@ -1,4 +1,5 @@
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
+import 'package:blog_app/core/common/entities/user.dart';
 import 'package:blog_app/core/common/widgets/bottom_navigation_shell.dart';
 
 import 'package:blog_app/core/theme/app_theme.dart';
@@ -7,11 +8,15 @@ import 'package:blog_app/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_app/features/auth/presentation/pages/signin_page.dart';
 import 'package:blog_app/features/auth/presentation/pages/signup_page.dart';
 import 'package:blog_app/features/blog/domain/entities/blog.dart';
+import 'package:blog_app/features/blog/domain/entities/users.dart';
 import 'package:blog_app/features/blog/presentation/bloc/blog_bloc.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/add_new_blog_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/blog_viewer_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/poster_blog_viewer_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/poster_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/search_page.dart';
+import 'package:blog_app/features/blog/presentation/pages/your_blogs_viewer_page.dart';
 import 'package:blog_app/features/blog/presentation/pages/your_profile_page.dart';
 import 'package:blog_app/init_dependencies.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +150,33 @@ class _MainAppState extends State<MainApp> {
                       final blog = state.extra as Blog;
                       return BlogViewerPage(blog: blog);
                     },
-                  )
+                  ),
+                  GoRoute(
+                    name: PosterPage.pageName,
+                    path: PosterPage.pageName,
+                    builder: (context, state)  {
+                      final args = state.extra as Users;
+                      //final id = state.extra as User;
+                      return PosterPage(name: args.name, id: args.id);
+                    },
+                  ),
+                    
+                      GoRoute(
+                        name: PosterBlogViewerPage.pageName,
+                        path: PosterBlogViewerPage.pageName,
+                        builder: (context, state) {
+                          //adding the blog while routing
+                          final blog = state.extra as Blog;
+                          return PosterBlogViewerPage(blog: blog);
+                        }, 
+                      ),
+                    
+                  
+                  GoRoute(
+                    name: '/your-profile',
+                    path: '/your-profile',
+                    builder: (context, state) => const YourProfilePage(),
+                  ),
                 ],
               ),
             ]
@@ -182,12 +213,12 @@ class _MainAppState extends State<MainApp> {
                 builder: (context, state) => const YourProfilePage(),
                 routes: [
                   GoRoute(
-                    name: 'blog-viewer-profile', //did this way to add duplicate routes.
-                    path: '/blog-viewer',
+                    name: YourBlogsViewerPage.pageName, //gave a separate page for yourblogs page.
+                    path: YourBlogsViewerPage.pageName,
                     builder: (context, state) {
                       //adding the blog while routing
                       final blog = state.extra as Blog;
-                      return BlogViewerPage(blog: blog);
+                      return YourBlogsViewerPage(blog: blog);
                     },
                   )
                 ]
