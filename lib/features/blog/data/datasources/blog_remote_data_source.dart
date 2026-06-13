@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blog_app/core/errors/exceptions.dart';
 import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:blog_app/features/blog/data/models/users_model.dart';
@@ -52,10 +50,12 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
     required BlogModel blog,
   }) async {
     try {
-      // Supabase storage expects a dart:io `File` on non-web platforms.
-      final File file = File(image.path);
+      final bytes = await image.readAsBytes();
 
-      await supabaseClient.storage.from('blog_images').upload(blog.id, file);
+      await supabaseClient.storage.from('blog_images').uploadBinary(
+        blog.id,
+        bytes,
+      );
 
       return supabaseClient.storage.from('blog_images').getPublicUrl(blog.id);
     } 

@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:blog_app/core/common/cubits/app%20user/app_user_cubit.dart';
 import 'package:blog_app/core/common/widgets/loader.dart';
@@ -32,6 +32,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
   List<String> selectedTopic = [];
 
   XFile? _pickedImage;
+  Uint8List? _pickedImageBytes;
   final _imagePickerService = ImagePickerService();
 
   @override
@@ -63,15 +64,19 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
     if (result == 'camera') {
       final image = await _imagePickerService.pickFromCamera();
       if (image != null) {
+        final bytes = await image.readAsBytes();
         setState(() {
           _pickedImage = image;
+          _pickedImageBytes = bytes;
         });
       }
     } else if (result == 'gallery') {
       final image = await _imagePickerService.pickFromGallery();
       if (image != null) {
+        final bytes = await image.readAsBytes();
         setState(() {
           _pickedImage = image;
+          _pickedImageBytes = bytes;
         });
       }
     }
@@ -127,6 +132,7 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
             if(mounted){
               setState(() {
                 _pickedImage = null;
+                _pickedImageBytes = null;
                 selectedTopic = [];
               });
             }
@@ -176,8 +182,8 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                                   )
                                   : ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child: Image.file(
-                                      File(_pickedImage!.path),
+                                    child: Image.memory(
+                                      _pickedImageBytes!,
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
